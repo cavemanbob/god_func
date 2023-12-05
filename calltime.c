@@ -1,28 +1,29 @@
 #include <stdio.h>
-#include <math.h>
 #include <time.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
-void calltime(void (*func)()){
+#define calltime(func, ...) \
+	CALLTIME((void (*)(va_list))func, __VA_ARGS__)
+
+void CALLTIME(void (*func)(va_list),...){
    clock_t start_t = clock();
-	func();
+	va_list args;
+	va_start(args, func);
+	func(args);
+	va_end(args);
    clock_t end_t = clock();
    printf("\nTotal time taken by CPU: %f\n", (double)(end_t - start_t) / CLOCKS_PER_SEC );
 }
 
+
 /*
   Usage 
-  
-  create like something like that
+  	calltime(myfunc,__ARG__); // the part that __ARG__ for arg of myfunc
 
-  void test(){
-      slowfunc(457,123,20);
-    }
-
-  and
-
+	so what i mean
   int main(){
-    calltime(test);
+    calltime(myfunc,45,"my string", 82.3);
   }
 
 */
