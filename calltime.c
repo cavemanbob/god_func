@@ -10,8 +10,7 @@
         __typeof__(func(__VA_ARGS__)) result; \
         result = func(__VA_ARGS__); \
         clock_t end_t = clock(); \
-        double elapsed_time = ((double)(end_t - start_t)) / CLOCKS_PER_SEC; \
-        printf("Execution time: %f seconds\n", elapsed_time); \
+        printf("Execution time: %f seconds\n", ((double)(end_t - start_t)) / CLOCKS_PER_SEC); \
         result; \
     })
 
@@ -20,8 +19,7 @@
         clock_t start_t = clock(); \
         func(__VA_ARGS__); \
         clock_t end_t = clock(); \
-        double elapsed_time = ((double)(end_t - start_t)) / CLOCKS_PER_SEC; \
-        printf("Execution time: %f seconds\n", elapsed_time); \
+        printf("Execution time: %f seconds\n", ((double)(end_t - start_t)) / CLOCKS_PER_SEC); \
     }
 
 
