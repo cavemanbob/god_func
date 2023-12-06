@@ -3,18 +3,26 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-#define calltime(func, ...) \
-	CALLTIME((void (*)(va_list))func, __VA_ARGS__)
 
-void CALLTIME(void (*func)(va_list),...){
-   clock_t start_t = clock();
-	va_list args;
-	va_start(args, func);
-	func(args);
-	va_end(args);
-   clock_t end_t = clock();
-   printf("\nTotal time taken by CPU: %f\n", (double)(end_t - start_t) / CLOCKS_PER_SEC );
-}
+#define calltime_r(func, ...) \
+    ({ \
+        clock_t start_t = clock(); \
+        __typeof__(func(__VA_ARGS__)) result; \
+        result = func(__VA_ARGS__); \
+        clock_t end_t = clock(); \
+        double elapsed_time = ((double)(end_t - start_t)) / CLOCKS_PER_SEC; \
+        printf("Execution time: %f seconds\n", elapsed_time); \
+        result; \
+    })
+
+#define calltime(func, ...) \
+     { \
+        clock_t start_t = clock(); \
+        func(__VA_ARGS__); \
+        clock_t end_t = clock(); \
+        double elapsed_time = ((double)(end_t - start_t)) / CLOCKS_PER_SEC; \
+        printf("Execution time: %f seconds\n", elapsed_time); \
+    }
 
 
 /*
@@ -25,5 +33,7 @@ void CALLTIME(void (*func)(va_list),...){
   int main(){
     calltime(myfunc,45,"my string", 82.3);
   }
+  if your function return something and u want use that so u should use that
+  double myreturn = calltime_r(myyfunction,45,38,"my string")
 
 */
